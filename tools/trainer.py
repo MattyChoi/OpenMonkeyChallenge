@@ -5,7 +5,8 @@ from omegaconf import DictConfig, OmegaConf
 import tensorboard
 from pytorch_lightning import seed_everything
 from pytorch_lightning.trainer import Trainer
-from pytorch_lightning.loggers import TensorBoardLogger, ModelCheckpoint
+from pytorch_lightning.loggers import TensorBoardLogger
+from pytorch_lightning.callbacks import ModelCheckpoint
 
 
 def get_train_params(cfg: DictConfig):
@@ -67,9 +68,9 @@ def train(cfg: DictConfig):
     trainer.test(model=task, data_module=data_module)
 
 
-@hydra.main(config_path="../config", config_name="defualts")
-def run (cfg: DictConfig):
-    os.environ["HYDRA_FULL_ERROR"] = os.environ.get("HYDRA_FULL_ERROR")
+@hydra.main(config_path="../config", config_name="defaults")
+def run(cfg: DictConfig):
+    os.environ["HYDRA_FULL_ERROR"] = os.environ.get("HYDRA_FULL_ERROR", "1")
     train(cfg)
 
 if __name__ == "__main__":
