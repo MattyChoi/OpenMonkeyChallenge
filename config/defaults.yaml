@@ -1,5 +1,5 @@
-
 seed: 69
+log: True
 cpu: 1
 gpu: 1
 num_nodes: 1
@@ -9,14 +9,14 @@ defaults:
   - model: hrnet
   - data_module: max
   - dataset: omc
-  - transform: null
+  - transform: no_transform
   - loss: mse
   - user_overrides: null
 
 callbacks:
 
-task:
-  _target_: 
+tasks:
+  _target_: tasks.pred_pose.PoseEstimationModule
 
 optimizer:
   _target_: torch.optim.Adam
@@ -30,7 +30,7 @@ lr_scheduler:
 trainer:
   precision: 32
   max_epochs: 25
-  bechmark: True
+  benchmark: True
   profiler: null
   num_sanity_val_steps: 0
   check_val_every_n_epoch: 2

@@ -1,7 +1,7 @@
 dataset:
   train:
-    __target__: 
+    __target__: datasets.omc.OMC
   val:
-    __target__:
-  test:
-    __target__:
+    __target__: datasets.omc.OMC_Test
+  test: 
+    __target__: datasets.omc.OMC_Test

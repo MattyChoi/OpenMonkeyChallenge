@@ -1,8 +1,11 @@
 import os
+import sys
+# Import modules from base directory
+sys.path.insert(0, os.getcwd())
+
 import hydra
 from typing import Dict
 from omegaconf import DictConfig, OmegaConf
-import tensorboard
 from pytorch_lightning import seed_everything
 from pytorch_lightning.trainer import Trainer
 from pytorch_lightning.loggers import TensorBoardLogger
@@ -12,7 +15,6 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 def get_train_params(cfg: DictConfig):
     params = OmegaConf.to_container(cfg.trainer, resolve=True)
     assert isinstance(params, Dict)
-    tb_logger = None
 
     if cfg.log:
         # logging using tensorboard
@@ -28,12 +30,13 @@ def get_train_params(cfg: DictConfig):
         checkpoint_callback = ModelCheckpoint(dirpath=f"{logger.log_dir}/checkpoints")
         callbacks.append(checkpoint_callback)
 
+        # add callbacks
         if cfg.callbacks:
             for _, callback in cfg.callbacks.items():
                 callbacks.append(hydra.utils.instantiate(callbacks))
 
         params["logger"] = logger
-        params["calbacks"] = callbacks
+        params["callbacks"] = callbacks
 
     else:
         params["logger"] = False
@@ -47,14 +50,13 @@ def train(cfg: DictConfig):
     seed_everything(cfg.seed)
 
     # build model to be trained
-    task = hydra.utils.instantiate(cfg.task)
+    task = hydra.utils.instantiate(cfg.tasks, cfg)
 
     # build data for model to be trained on
     data_module = hydra.utils.instantiate(
-        cfg.data_module,
-        dataset=cfg.dataset,
-        transforms=cfg.transform,
-        _recurisive=False,
+        cfg.data_module.data_module,
+        dataset=cfg.dataset.dataset,
+        transform=cfg.transform.transform,
     )
 
     # create the Trainer object with all the wanted configurations
