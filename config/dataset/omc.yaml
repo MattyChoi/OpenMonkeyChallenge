@@ -1,7 +1,6 @@
-dataset:
-  train:
-    __target__: datasets.omc.OMC
-  val:
-    __target__: datasets.omc.OMC_Test
-  test: 
-    __target__: datasets.omc.OMC_Test
+train:
+  __target__: datasets.omc.OMC
+val:
+  __target__: datasets.omc.OMC_Test
+test: 
+  __target__: datasets.omc.OMC_Test

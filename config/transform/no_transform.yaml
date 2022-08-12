@@ -1,4 +1,3 @@
-transform:
-  train: null
-  val: null
-  test: null
+train: null
+val: null
+test: null

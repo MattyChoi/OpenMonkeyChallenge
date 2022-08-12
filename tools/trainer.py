@@ -54,9 +54,9 @@ def train(cfg: DictConfig):
 
     # build data for model to be trained on
     data_module = hydra.utils.instantiate(
-        cfg.data_module.data_module,
-        dataset=cfg.dataset.dataset,
-        transform=cfg.transform.transform,
+        cfg.data_module,
+        dataset=cfg.dataset,
+        transform=cfg.transform,
     )
 
     # create the Trainer object with all the wanted configurations

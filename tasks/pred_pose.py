@@ -1,7 +1,6 @@
 import hydra
 import pytorch_lightning as pl
 import torch
-import torch.utils.data as data
 import torchmetrics
 from omegaconf import DictConfig
 
@@ -16,10 +15,40 @@ class PoseEstimationModule(pl.LightningModule):
     def forward(self, images: torch.Tensor, *args, **kwargs):
         return self.model(images)
 
-    def predict(self, batch: torch.Tensor):
-        pass
-
     def training_step(
         self, batch: torch.Tensor, batch_idx: int, *args, **kwargs
     ) -> torch.Tensor:
+        # get the training images and output heatmaps
         images, hmaps = batch
+
+        # predict the heatmaps from the images
+        pred_hmaps = self.forward(images)
+
+        return self.loss(pred_hmaps, hmaps)
+
+    def validation_step(
+        self, batch: torch.Tensor, batch_idx: int, *args, **kwargs
+    ) -> torch.Tensor:
+        images, hmaps = batch
+
+        # predict the heatmaps from the images
+        pred_hmaps = self.forward(images)
+
+        return pred_hmaps
+
+    def test_step(
+        self, batch: torch.Tensor, batch_idx: int, *args, **kwargs
+    ) -> torch.Tensor:
+        images, hmaps = batch
+
+        # predict the heatmaps from the images
+        pred_hmaps = self.forward(images)
+
+        return pred_hmaps
+
+    def configure_optimizers(self):
+        optimizer = hydra.utils.instantiate(
+            self.hparams.optimizer, list(self.model.parameters())
+        )
+        lr_scheduler = hydra.utils.instantiate(self.hparams.lr_scheduler, optimizer)
+        return [optimizer], [lr_scheduler]
