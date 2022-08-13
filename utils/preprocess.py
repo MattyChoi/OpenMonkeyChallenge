@@ -1,14 +1,15 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import cv2
+import matplotlib.pyplot as plt
+import numpy as np
 import skimage.transform
 import skimage.filters
+import torch
 
 
 # for generating ground truth heatmaps
 def gen_hmaps(img, pts, sigma_valu=2):
     '''
-    Generate 16 heatmaps
+    Generate 17 heatmaps
     :param img: np arrray img, (H,W,C)
     :param pts: joint points coords, np array, same resolu as img
     :param sigma: should be a tuple with odd values (obsolete)
@@ -53,12 +54,7 @@ def crop(img, ele_anno, crop_size=256):
     # print("ptsx", xs)
     # print("ptsy", ys)
 
-    cen = np.array((1,2))
-    cen[0] = int(bbox[0] + bbox[2]/2)
-    cen[1] = int(bbox[1] + bbox[3]/2)
-
-
-    H,W = img.shape[0], img.shape[1]
+    H, W = img.shape[0], img.shape[1]
 
     # topleft:x1,y1  bottomright:x2,y2
     bb_x1 = int(bbox[0])
@@ -93,18 +89,11 @@ def crop(img, ele_anno, crop_size=256):
     #ys = np.array([ys[i]-bb_y1 for i in range(len(ys)) if i in pts_nonzero])
     bbox[0] -= bb_x1
     bbox[1] -= bb_y1
-    
-
-    cen[0] = int((bb_x2-bb_x1)/2)
-    cen[1] = int((bb_y2-bb_y1)/2)
-
 
     # resize
     H,W = img.shape[0], img.shape[1]
     xs = xs*crop_size/W
     ys = ys*crop_size/H
-    cen[0] = cen[0]*crop_size/W
-    cen[1] = cen[1]*crop_size/H
     
     # print("scale", scale)
     # print("bbox", bbox)
@@ -120,4 +109,4 @@ def crop(img, ele_anno, crop_size=256):
     pts = [[xs[i], ys[i]] for i in range(len(xs))]
 
 
-    return img, pts, cen
+    return img, pts

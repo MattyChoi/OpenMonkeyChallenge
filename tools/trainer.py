@@ -57,6 +57,7 @@ def train(cfg: DictConfig):
         cfg.data_module,
         dataset=cfg.dataset,
         transform=cfg.transform,
+        _recursive_=False,
     )
 
     # create the Trainer object with all the wanted configurations
@@ -64,13 +65,13 @@ def train(cfg: DictConfig):
     trainer = Trainer(**params)
 
     # train the model
-    trainer.fit(task, data_module)
+    trainer.fit(model=task, datamodule=data_module)
 
     # test the model
-    trainer.test(model=task, data_module=data_module)
+    trainer.test(model=task, datamodule=data_module)
 
 
-@hydra.main(config_path="../config", config_name="defaults")
+@hydra.main(version_base=None, config_path="../config", config_name="defaults")
 def run(cfg: DictConfig):
     os.environ["HYDRA_FULL_ERROR"] = os.environ.get("HYDRA_FULL_ERROR", "1")
     train(cfg)

@@ -1,6 +1,12 @@
 train:
-  __target__: datasets.omc.OMC
+  _target_: datasets.omc.OMC
+  data_dir: ${hydra:runtime.cwd}/data
+  transform: null
 val:
-  __target__: datasets.omc.OMC_Test
+  _target_: datasets.omc.OMC_Test
+  data_dir: ${hydra:runtime.cwd}/data
+  transform: null
 test: 
-  __target__: datasets.omc.OMC_Test
+  _target_: datasets.omc.OMC_Test
+  data_dir: ${hydra:runtime.cwd}/data
+  transform: null

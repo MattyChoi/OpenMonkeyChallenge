@@ -1,22 +1,16 @@
 _target_: datasets.omc_pl_module.OMCModule
 train:
-  batch_size: 8
+  batch_size: 4
   shuffle: True
-  num_workers: 2
+  num_workers: 1
   drop_last: False
   pin_memory: True
   collate_fn: null
 val:
-  batch_size: 8
+  batch_size: ${data_module.train.batch_size}
   shuffle: False
-  num_workers: 2
+  num_workers: ${data_module.train.num_workers}
   drop_last: False
   pin_memory: True
   collate_fn: null
-test:
-  batch_size: 8
-  shuffle: False
-  num_workers: 2
-  drop_last: False
-  pin_memory: True
-  collate_fn: null
+test: ${data_module.val}

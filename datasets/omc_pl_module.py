@@ -1,11 +1,10 @@
 import hydra
 import pytorch_lightning as pl
-import torch
 from torch.utils.data import Dataset, DataLoader
 from omegaconf import DictConfig
 
 
-class OMCModule(pl.LightningModule):
+class OMCModule(pl.LightningDataModule):
     def __init__(
         self, 
         dataset: DictConfig,        # dictconfig that contains train, val, and test dataloaders
@@ -49,7 +48,7 @@ class OMCModule(pl.LightningModule):
         return DataLoader(
             _dataset,
             batch_size=cfg.batch_size,
-            num_workers=cfg.num_wokers,
+            num_workers=cfg.num_workers,
             drop_last=cfg.drop_last,
             pin_memory=cfg.pin_memory,
             collate_fn=_dataset.collate_fn,
