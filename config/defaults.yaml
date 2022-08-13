@@ -1,0 +1,39 @@
+seed: 69
+log: True
+cpu: 1
+gpu: 1
+num_nodes: 1
+
+defaults:
+  - _self_
+  - model: hrnet
+  - data_module: max
+  - dataset: omc
+  - transform: no_transform
+  - loss: mse
+  - user_overrides: null
+
+callbacks:
+
+tasks:
+  _target_: tasks.pred_pose.PoseEstimationModule
+
+optimizer:
+  _target_: torch.optim.Adam
+  lr: 1e-4
+
+lr_scheduler:
+  _target_: torch.optim.lr_scheduler.MultiStepLR
+  milestones: [12, 25]
+  gamma: 0.2
+
+trainer:
+  precision: 32
+  max_epochs: 25
+  benchmark: True
+  profiler: null
+  num_sanity_val_steps: 0
+  check_val_every_n_epoch: 2
+  accelerator: 'gpu'
+  devices: ${gpu}
+  num_nodes: ${num_nodes}
