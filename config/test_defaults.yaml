@@ -1,0 +1,22 @@
+seed: 69
+log: True
+cpu: 1
+gpu: 1
+num_nodes: 1
+
+defaults:
+  - _self_
+  - model: hrnet
+  - data_module: max
+  - dataset: omc
+  - transform: no_transform
+  - loss: mse
+  - user_overrides: null
+
+callbacks:
+
+tasks:
+  _target_: tasks.pred_pose.PoseEstimationModule
+  
+
+pretrained: # add path to the pretrained weights
