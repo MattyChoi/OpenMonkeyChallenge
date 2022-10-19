@@ -44,9 +44,9 @@ def pred(cfg: DictConfig):
     seed_everything(cfg.seed)
 
     # build model
-    pretrained = cfg.pretrained_checkpoint
+    pretrained = cfg.pretrained
     task = hydra.utils.instantiate(cfg.tasks, cfg).load_from_checkpoint(
-        pretrained, datatset=cfg.dataset, map_location=None
+        pretrained, dataset=cfg.dataset, map_location=None
     )
 
     # build data for model to be trained on
@@ -60,9 +60,6 @@ def pred(cfg: DictConfig):
     # create the Trainer object with all the wanted configurations
     params = get_predict_params(cfg)
     trainer = Trainer(**params)
-
-    # train the model
-    trainer.fit(model=task, datamodule=data_module)
 
     # test the model
     trainer.test(model=task, datamodule=data_module)

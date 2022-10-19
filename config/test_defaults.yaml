@@ -19,4 +19,4 @@ tasks:
   _target_: tasks.pred_pose.PoseEstimationModule
   
 
-pretrained: # add path to the pretrained weights
+pretrained: tb_logs\lightning_logs\version_2\checkpoints\epoch=1-step=6692.ckpt # add path to the pretrained weights
